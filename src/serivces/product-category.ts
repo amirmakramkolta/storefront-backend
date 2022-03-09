@@ -20,7 +20,7 @@ export class ProductCategory{
             const sql = `select product.name as product_name, product.price, category.name as category_name
                         from product join category
                         on product.category_id = category.category_id
-                        where product.id = $1`;
+                        where product.product_id = $1`;
             const result  = await connect.query(sql,[id]);
             connect.release();
             return result.rows;
@@ -34,7 +34,7 @@ export class ProductCategory{
             const sql = `select product.name as product_name, product.price, category.name as category_name
             from product join category
             on product.category_id = category.category_id
-            where category.id = $1`;
+            where category.category_id = $1`;
             const result  = await connect.query(sql,[id]);
             connect.release();
             return result.rows;
