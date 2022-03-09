@@ -22,7 +22,7 @@ export class Products{
     async show(id:number):Promise<product[]>{
         try{
             const connect = await client.connect();
-            const sql = "select * from product where id = $1";
+            const sql = "select * from product where product_id = $1";
             const result = await connect.query(sql,[id]);
             connect.release();
             return result.rows;
@@ -33,7 +33,7 @@ export class Products{
     async create(p:product):Promise<Products[]>{
         try{
             const connect = await client.connect();
-            const sql = "insert into product (name, price, categoryId)values($1, $2, $3)";
+            const sql = "insert into product (name, price, category_id)values($1, $2, $3)";
             const result = await connect.query(sql,[p.name,p.price,p.categoryId]);
             connect.release();
             return result.rows;
