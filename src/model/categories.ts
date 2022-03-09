@@ -1,7 +1,7 @@
 import client from "../database";
 
 export type categoryType  = {
-    id:number
+    category_id:number|null
     name:string
 }
 
@@ -28,13 +28,13 @@ export class Categories{
             throw new Error(`something wrong ${err}`)
         }
     }
-    async create(c:categoryType):Promise<categoryType[]>{
+    async create(c:categoryType):Promise<number>{
         try{
             const connect = await client.connect();
             const sql = "insert  into category (name) values ($1)"
             const result = await connect.query(sql,[c.name]);
             connect.release();
-            return result.rows;
+            return result.rowCount;
         }catch(err){
             throw new Error(`something wrong ${err}`)
         }

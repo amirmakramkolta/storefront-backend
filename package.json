@@ -8,7 +8,8 @@
     "jasmine": "jasmine",
     "pre-test": "npm run build && npm run jasmine",
     "test": "set env_node=test && db-migrate --env test up && npm run pre-test && db-migrate --env test reset",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts",
+    "clear-test-db": "db-migrate --env test reset"
   },
   "keywords": [],
   "author": "Amir Makram",
