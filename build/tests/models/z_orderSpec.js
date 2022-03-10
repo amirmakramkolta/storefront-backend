@@ -23,7 +23,7 @@ describe("Test order model", () => {
     }));
     it("should create empty order", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield orderForTest.create(dataTest);
-        expect(data).toEqual(1);
+        expect(data).toEqual(dataTest);
     }));
     it("should return orders of user", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield orderForTest.getOrdersByUser(1);

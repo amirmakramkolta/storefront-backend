@@ -24,7 +24,7 @@ describe("Product for test", () => {
     }));
     it("should create new product", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield productForTest.create(dataTest);
-        expect(data).toEqual(1);
+        expect(data).toEqual([dataTest]);
     }));
     it("should return 1 item", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield productForTest.show(1);

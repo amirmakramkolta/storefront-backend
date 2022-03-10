@@ -49,8 +49,10 @@ class Products {
                 const connect = yield database_1.default.connect();
                 const sql = "insert into product (name, price, category_id)values($1, $2, $3)";
                 const result = yield connect.query(sql, [p.name, p.price, p.category_id]);
+                const sql2 = "select * from product where name = $1";
+                const result2 = yield connect.query(sql2, [p.name]);
                 connect.release();
-                return result.rowCount;
+                return result2.rows;
             }
             catch (err) {
                 throw new Error(`something wrong ${err}`);

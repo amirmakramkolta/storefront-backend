@@ -22,7 +22,7 @@ export const userRoutes =(app:express.Application)=>{
             res.json(token);
         }catch(err){
             res.status(400)
-            res.json(req.query)
+            res.json(`something wrong ${err}`)
         }
     });
     app.post("/signin",async(req:express.Request,res:express.Response)=>{
@@ -42,7 +42,7 @@ export const userRoutes =(app:express.Application)=>{
             }
         }catch(err){
             res.status(400);
-            res.json(err)
+            res.json(`something wrong ${err}`)
         }
     })
     app.get("/users",async(req:express.Request,res:express.Response)=>{
@@ -51,7 +51,7 @@ export const userRoutes =(app:express.Application)=>{
             jwt.verify(data,(process.env.secret as string))
         }catch(err){
             res.status(401);
-            res.json("sorry data not valid")
+            res.json(`something wrong ${err}`)
             return
         }
         try{
@@ -70,7 +70,7 @@ export const userRoutes =(app:express.Application)=>{
                 jwt.verify(data,(process.env.secret as string))
             }catch(err){
                 res.status(401);
-                res.json("sorry data not valid")
+                res.json(`something wrong ${err}`)
                 return
             }
             try{
@@ -87,7 +87,7 @@ export const userRoutes =(app:express.Application)=>{
                 }
             }catch(err){
                 res.status(500);
-                res.json(err)
+                res.json(`something wrong ${err}`)
             }
         }
     })

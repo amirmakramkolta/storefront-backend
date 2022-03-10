@@ -13,7 +13,7 @@ describe("Test order model",()=>{
     })
     it("should create empty order",async()=>{
         const data = await orderForTest.create(dataTest);
-        expect(data).toEqual(1);
+        expect(data).toEqual(dataTest);
     })
     it("should return orders of user",async()=>{
         const data = await orderForTest.getOrdersByUser(1);

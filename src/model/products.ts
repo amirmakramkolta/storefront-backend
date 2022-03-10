@@ -30,13 +30,15 @@ export class Products{
             throw new Error (`something wrong ${err}`)
         }
     }
-    async create(p:productType):Promise<number>{
+    async create(p:productType):Promise<productType[]>{
         try{
             const connect = await client.connect();
             const sql = "insert into product (name, price, category_id)values($1, $2, $3)";
             const result = await connect.query(sql,[p.name,p.price,p.category_id]);
+            const sql2 = "select * from product where name = $1"
+            const result2 = await connect.query(sql2,[p.name])
             connect.release();
-            return result.rowCount;
+            return result2.rows;
         }catch(err){
             throw new Error (`something wrong ${err}`)
         }

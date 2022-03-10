@@ -18,13 +18,17 @@ export class Orders{
             throw new Error (`something wrong ${err}`)
         }
     }
-    async create(o:orderType):Promise<number>{
+    async create(o:orderType):Promise<orderType>{
         try{
             const connect = await client.connect();
             const sql = "insert into s_order (store_user_id ,status_of_order) values ($1, $2)";
             const result = await connect.query(sql,[o.store_user_id,o.status_of_order]);
+            const sql2 = `select * from s_order 
+                          order by order_id desc
+                          limit 1`;
+            const result2 = await connect.query(sql2)
             connect.release();
-            return result.rowCount;
+            return result2.rows[0];
         }catch(err){
             throw new Error (`something wrong ${err}`)
         }

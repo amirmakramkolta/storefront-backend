@@ -22,7 +22,7 @@ describe("category for test", () => {
     }));
     it("should create new category", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield categoryForTest.create(testdata);
-        expect(data).toEqual(1);
+        expect(data).toEqual([testdata]);
     }));
     it("should return 1 item", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield categoryForTest.show(1);

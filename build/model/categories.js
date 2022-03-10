@@ -49,8 +49,10 @@ class Categories {
                 const connect = yield database_1.default.connect();
                 const sql = "insert  into category (name) values ($1)";
                 const result = yield connect.query(sql, [c.name]);
+                const sql2 = "select * from category where name =$1";
+                const result2 = yield connect.query(sql2, [c.name]);
                 connect.release();
-                return result.rowCount;
+                return result2.rows;
             }
             catch (err) {
                 throw new Error(`something wrong ${err}`);

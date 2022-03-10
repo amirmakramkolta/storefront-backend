@@ -22,26 +22,26 @@ const userRoutes = (app) => {
     app.post("/create-user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const newUserData = {
             store_user_id: 0,
-            first_name: req.params.firstName,
-            last_name: req.params.lastName,
-            email: req.params.email,
-            hash_password: req.params.password
+            first_name: req.body.firstname,
+            last_name: req.body.lastname,
+            email: req.body.email,
+            hash_password: req.body.password
         };
         try {
             const data = yield userForRoutes.create(newUserData);
-            // const token = jwt.sign({email:data.email,id:data.store_user_id},(process.env.secret as string));
+            const token = jsonwebtoken_1.default.sign({ email: data.email, id: data.store_user_id }, process.env.secret);
             res.status(200);
-            res.json(data);
+            res.json(token);
         }
         catch (err) {
             res.status(400);
-            res.json(err);
+            res.json(`something wrong ${err}`);
         }
     }));
     app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const loginUser = {
-            email: req.params.email,
-            password: req.params.password
+            email: req.body.email,
+            password: req.body.password
         };
         try {
             const data = yield userForRoutes.signin(loginUser.email, loginUser.password);
@@ -57,17 +57,17 @@ const userRoutes = (app) => {
         }
         catch (err) {
             res.status(400);
-            res.json(err);
+            res.json(`something wrong ${err}`);
         }
     }));
     app.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = req.params.token;
+        const data = req.body.token;
         try {
             jsonwebtoken_1.default.verify(data, process.env.secret);
         }
         catch (err) {
             res.status(401);
-            res.json("sorry data not valid");
+            res.json(`something wrong ${err}`);
             return;
         }
         try {
@@ -81,14 +81,14 @@ const userRoutes = (app) => {
         }
     }));
     app.get("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = req.params.token;
+        const data = req.body.token;
         {
             try {
                 jsonwebtoken_1.default.verify(data, process.env.secret);
             }
             catch (err) {
                 res.status(401);
-                res.json("sorry data not valid");
+                res.json(`something wrong ${err}`);
                 return;
             }
             try {
@@ -98,14 +98,16 @@ const userRoutes = (app) => {
                     res.json("something wrong");
                 }
                 else {
-                    const OneUser = yield userForRoutes.show(JSON.parse(data).email);
+                    const stringData = userData;
+                    // const dataInJson = JSON.parse(stringData)
+                    const OneUser = yield userForRoutes.show(stringData.email);
                     res.status(200);
-                    res.json(OneUser);
+                    res.send(OneUser);
                 }
             }
             catch (err) {
                 res.status(500);
-                res.json(err);
+                res.json(`something wrong ${err}`);
             }
         }
     }));

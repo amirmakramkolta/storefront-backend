@@ -11,7 +11,7 @@ describe("category for test",()=>{
     })
     it("should create new category",async()=>{
         const data = await categoryForTest.create(testdata);
-        expect(data).toEqual(1);
+        expect(data).toEqual([testdata]);
     })
     it("should return 1 item",async()=>{
         const data = await categoryForTest.show(1);

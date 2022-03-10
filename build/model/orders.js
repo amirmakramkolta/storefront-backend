@@ -35,8 +35,12 @@ class Orders {
                 const connect = yield database_1.default.connect();
                 const sql = "insert into s_order (store_user_id ,status_of_order) values ($1, $2)";
                 const result = yield connect.query(sql, [o.store_user_id, o.status_of_order]);
+                const sql2 = `select * from s_order 
+                          order by order_id desc
+                          limit 1`;
+                const result2 = yield connect.query(sql2);
                 connect.release();
-                return result.rowCount;
+                return result2.rows[0];
             }
             catch (err) {
                 throw new Error(`something wrong ${err}`);
