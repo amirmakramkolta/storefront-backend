@@ -22,7 +22,7 @@ describe("Test User Model",()=>{
     })
     it("should create new user",async()=>{
         const data = await userForTest.create(dataTest);
-        expect(data).toEqual(dataTest.email);
+        expect(data).toEqual(dataTestNoPassword);
     })
     it("should return data",async()=>{
         const data = await userForTest.show(dataTest.email);
@@ -30,6 +30,6 @@ describe("Test User Model",()=>{
     })
     it("should signin",async()=>{
         const data = await userForTest.signin(dataTest.email,dataTest.hash_password);
-        expect(data).toEqual(dataTest.email)
+        expect(data).toEqual(dataTestNoPassword)
     })
 })

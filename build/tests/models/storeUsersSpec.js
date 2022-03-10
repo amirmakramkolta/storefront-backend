@@ -31,7 +31,7 @@ describe("Test User Model", () => {
     }));
     it("should create new user", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield userForTest.create(dataTest);
-        expect(data).toEqual(dataTest.email);
+        expect(data).toEqual(dataTestNoPassword);
     }));
     it("should return data", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield userForTest.show(dataTest.email);
@@ -39,6 +39,6 @@ describe("Test User Model", () => {
     }));
     it("should signin", () => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield userForTest.signin(dataTest.email, dataTest.hash_password);
-        expect(data).toEqual(dataTest.email);
+        expect(data).toEqual(dataTestNoPassword);
     }));
 });

@@ -39,10 +39,10 @@ class Users {
                 const sql = "insert into store_user (first_name, last_name, email, hash_password) values ($1, $2, $3, $4)";
                 const hash_password = bcrypt_1.default.hashSync(u.hash_password + process.env.pepper, parseInt(process.env.salt));
                 const result = yield connect.query(sql, [u.first_name, u.last_name, u.email, hash_password]);
-                const sql2 = "select email from store_user where email = $1";
+                const sql2 = "select store_user_id, first_name, last_name,email from store_user where email = $1";
                 const result2 = yield connect.query(sql2, [u.email]);
                 connect.release();
-                return result2.rows[0].email;
+                return result2.rows[0];
             }
             catch (err) {
                 throw new Error(`something wrong ${err}`);
@@ -72,7 +72,12 @@ class Users {
                 connect.release();
                 const user = result.rows[0];
                 if (bcrypt_1.default.compareSync(password + process.env.pepper, user.hash_password)) {
-                    return result.rows[0].email;
+                    return {
+                        store_user_id: result.rows[0].store_user_id,
+                        first_name: result.rows[0].first_name,
+                        last_name: result.rows[0].last_name,
+                        email: result.rows[0].email
+                    };
                 }
                 else {
                     return null;
