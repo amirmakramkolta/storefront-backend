@@ -12,56 +12,86 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
+exports.show = exports.index = exports.signin = exports.create = exports.userRoutes = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const storeUsers_1 = require("../model/storeUsers");
 dotenv_1.default.config();
 const userForRoutes = new storeUsers_1.Users();
 const userRoutes = (app) => {
-    app.post("/create-user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const newUserData = {
-            store_user_id: 0,
-            first_name: req.body.firstname,
-            last_name: req.body.lastname,
-            email: req.body.email,
-            hash_password: req.body.password
-        };
-        try {
-            const data = yield userForRoutes.create(newUserData);
+    app.post("/create-user", exports.create);
+    app.post("/signin", exports.signin);
+    app.get("/users", exports.index);
+    app.get("/user", exports.show);
+};
+exports.userRoutes = userRoutes;
+const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newUserData = {
+        store_user_id: 0,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
+        email: req.body.email,
+        hash_password: req.body.password
+    };
+    try {
+        const data = yield userForRoutes.create(newUserData);
+        const token = jsonwebtoken_1.default.sign({ email: data.email, id: data.store_user_id }, process.env.secret);
+        res.status(200);
+        res.json(token);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(`something wrong ${err}`);
+    }
+});
+exports.create = create;
+const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const loginUser = {
+        email: req.body.email,
+        password: req.body.password
+    };
+    try {
+        const data = yield userForRoutes.signin(loginUser.email, loginUser.password);
+        if (data == null) {
+            res.status(404);
+            res.json("sorry user not found");
+        }
+        else {
             const token = jsonwebtoken_1.default.sign({ email: data.email, id: data.store_user_id }, process.env.secret);
             res.status(200);
             res.json(token);
         }
-        catch (err) {
-            res.status(400);
-            res.json(`something wrong ${err}`);
-        }
-    }));
-    app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const loginUser = {
-            email: req.body.email,
-            password: req.body.password
-        };
-        try {
-            const data = yield userForRoutes.signin(loginUser.email, loginUser.password);
-            if (data == null) {
-                res.status(404);
-                res.json("sorry user not found");
-            }
-            else {
-                const token = jsonwebtoken_1.default.sign({ email: data.email, id: data.store_user_id }, process.env.secret);
-                res.status(200);
-                res.json(token);
-            }
-        }
-        catch (err) {
-            res.status(400);
-            res.json(`something wrong ${err}`);
-        }
-    }));
-    app.get("/users", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = req.body.token;
+    }
+    catch (err) {
+        res.status(400);
+        res.json(`something wrong ${err}`);
+    }
+});
+exports.signin = signin;
+const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body.token;
+    try {
+        jsonwebtoken_1.default.verify(data, process.env.secret);
+    }
+    catch (err) {
+        res.status(401);
+        res.json(`something wrong ${err}`);
+        return;
+    }
+    try {
+        const allUsers = yield userForRoutes.index();
+        res.status(200);
+        res.json(allUsers);
+    }
+    catch (err) {
+        res.status(500);
+        res.json(err);
+    }
+});
+exports.index = index;
+const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body.token;
+    {
         try {
             jsonwebtoken_1.default.verify(data, process.env.secret);
         }
@@ -71,45 +101,22 @@ const userRoutes = (app) => {
             return;
         }
         try {
-            const allUsers = yield userForRoutes.index();
-            res.status(200);
-            res.json(allUsers);
+            const userData = jsonwebtoken_1.default.decode(data);
+            if (userData == null) {
+                res.status(400);
+                res.json("something wrong");
+            }
+            else {
+                const stringData = userData;
+                const OneUser = yield userForRoutes.show(stringData.email);
+                res.status(200);
+                res.send(OneUser);
+            }
         }
         catch (err) {
             res.status(500);
-            res.json(err);
+            res.json(`something wrong ${err}`);
         }
-    }));
-    app.get("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = req.body.token;
-        {
-            try {
-                jsonwebtoken_1.default.verify(data, process.env.secret);
-            }
-            catch (err) {
-                res.status(401);
-                res.json(`something wrong ${err}`);
-                return;
-            }
-            try {
-                const userData = jsonwebtoken_1.default.decode(data);
-                if (userData == null) {
-                    res.status(400);
-                    res.json("something wrong");
-                }
-                else {
-                    const stringData = userData;
-                    // const dataInJson = JSON.parse(stringData)
-                    const OneUser = yield userForRoutes.show(stringData.email);
-                    res.status(200);
-                    res.send(OneUser);
-                }
-            }
-            catch (err) {
-                res.status(500);
-                res.json(`something wrong ${err}`);
-            }
-        }
-    }));
-};
-exports.userRoutes = userRoutes;
+    }
+});
+exports.show = show;
