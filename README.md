@@ -3,7 +3,6 @@
 ## thing to do first
 
 - run `npm i` to get all node modules
-- run `db-migrate up` to get all tables in database
 - create a .env file and put excect same variable name to not getting any errors during running the project
     * host 
     * user 
@@ -14,8 +13,15 @@
     * salt `for salt round` 
     * pepper 
     * secret `for token secert`
+- create two databases one for your development environment and the another one for your testing environment
+- run `db-migrate up` to get all tables in your development environment database
 
 Now you are ready to start
+
+## Quick notes
+
+the project design to run on your localhost on port 3000 so your url will be like this:
+- http://localhost:3000/your-endpoint
 
 ## command that you should know about
 - npm run build: to build your project

@@ -53,27 +53,27 @@
 ## database schema
 
 ### store_user
-- store_user_id as primary key
-- first_name
-- last_name
-- email (Unique value)
-- hash_password
+- store_user_id as an int primary key 
+- first_name as a string
+- last_name as a string
+- email as a string (Unique value)
+- hash_password as a string
 
 ### category
-- category_id as primary key
-- name (Unique value)
+- category_id as an int primary key
+- name as a string (Unique value) - (50 character as max)
 
 ### product
-- product_id as primary key
-- name (Unique value)
-- price
-- category_id as foreign key to category table
+- product_id as an int primary key
+- name as string (Unique value)
+- price as an int
+- category_id as an int foreign key to category table (category_id column)
 
 ### s_order
-- order_id as primary key
-- store_user_id as foreign key to store_user table
-- status_of_order
+- order_id as an int primary key
+- store_user_id as an int foreign key to store_user table (store_user_id column)
+- status_of_order as a string - (50 character as max)
 ### product_order
-- order_id as foreign key to s_order table and composite primary key
-- product_id as foreign key to product table and composite primary key
-- quantity
+- order_id as an int foreign key to s_order table (order_id column) and composite primary key
+- product_id as an int foreign key to product table (product_id column) and composite primary key
+- quantity as an int
