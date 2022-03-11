@@ -14,7 +14,6 @@
     * salt `for salt round` 
     * pepper 
     * secret `for token secert`
-- create `database.json` for your db-migrate config
 
 Now you are ready to start
 
