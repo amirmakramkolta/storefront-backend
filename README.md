@@ -14,6 +14,7 @@
     * pepper 
     * secret `for token secert`
 - create two databases one for your development environment and the another one for your testing environment
+- put your development database in `database` variable in .env file and your testing database in `database_test` in .env file
 - run `db-migrate up` to get all tables in your development environment database
 
 Now you are ready to start
